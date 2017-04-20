@@ -47,9 +47,7 @@ public class EchoApplication {
 			
 			String sourceId = event.getMessage().getId();
 			String userId = event.getSource().getUserId();
-			TextMessage textMessage = new TextMessage("{\"type\": \"image\",\"originalContentUrl\": \"https://api.line.me/v2/bot/message/" 
-			+ sourceId + "/content\",\"previewImageUrl\": \"https://api.line.me/v2/bot/message/" 
-			+ sourceId + "/content\"}\");
+			TextMessage textMessage = new TextMessage("IMAGE");
 			PushMessage pushMessage = new PushMessage(
 					userId,
 					textMessage
