@@ -36,11 +36,32 @@ public class EchoApplication {
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         System.out.println("event: " + event);
-        return new TextMessage("Wnager say : " + event.getMessage().getText());
+		return new TextMessage("Wnager say : " + event.getMessage().getText());
     }
 
     @EventMapping
     public void handleDefaultMessageEvent(Event event) {
         System.out.println("event: " + event);
+		
+		if(event.getMessage().getType().equals("image")) {
+			
+			String sourceId = event.getMessage().getId();
+			String userId = event.getSource().getUserId();
+			TextMessage textMessage = new TextMessage("{\"type\": \"image\",\"originalContentUrl\": \"https://api.line.me/v2/bot/message/" 
+			+ sourceId + "/content\",\"previewImageUrl\": \"https://api.line.me/v2/bot/message/" 
+			+ sourceId + "/content\"}\");
+			PushMessage pushMessage = new PushMessage(
+					userId,
+					textMessage
+			);
+
+			Response<BotApiResponse> response =
+					LineMessagingServiceBuilder
+							.create("ljDZbAQ+cDy//i66XhmECvBxNIU5k9M6cIRmOcF5ewukX/008elC9q9RTfMKL4ah+TW9fmzFtyy0PQw2IRMC7zU5QsW3xGCh2Atq3PidKl0Ya4xHja6owZeJJYGM1B8n0HvtEZ6Kh2OYSs88TE26hQdB04t89/1O/w1cDnyilFU=")
+							.build()
+							.pushMessage(pushMessage)
+							.execute();
+			System.out.println(response.code() + " " + response.message());
+		}
     }
 }
